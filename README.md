@@ -1,40 +1,20 @@
-![Screenshot 1](https://github.com/user-attachments/assets/8f0c8038-c227-4056-a87a-2b3bec019356)
-# SMTP-mail-SENDER
-📧 SMTP Mail Sender Tool
+# 🐦 Bird Mailer (Resend Edition)
 
-The SMTP Mail Sender Tool is a lightweight automation utility for sending emails using SMTP servers. It simplifies the process of configuring and sending messages programmatically through common email providers like Gmail.
+A sophisticated, CLI-based email distribution tool optimized for the Resend API. It provides a terminal-friendly interface for sending professional emails with custom priority styling and attachment support.
 
-⚙️ Features:
-Send emails using SMTP authentication
-Supports secure TLS/SSL connections
-Custom subject and message body
-Easy configuration for sender credentials
-Simple command-line interface
-🎯 Purpose:
+## 🌟 Key Features
+* **Smart Configuration:** Securely saves your API key locally.
+* **Priority Templates:** 5 unique HTML warning styles for urgent communication.
+* **Interactive UI:** A beautiful, color-coded terminal experience.
+* **Attachment Handling:** Easily attach files to your correspondence.
 
-This tool is designed for educational cybersecurity and automation practice, helping users understand how SMTP works and how email transmission is handled programmatically.
+## 🚀 Getting Started
+1. **Clone:** `git clone https://github.com/whoami136/SMTP-mail-SENDER.git`
+2. **Install:** `pip install resend`
+3. **Execute:** `python mailer.py`
 
-📌 Use Cases:
-Learning SMTP protocol basics
-Automating test email delivery
-Understanding email server authentication
-Security lab simulations for email systems
-⚠️ Note:
+## ⚙️ Configuration
+The tool creates a `.resend_config` file on your machine. This file is automatically excluded from version control to protect your credentials.
 
-This tool should be used only in legal and ethical environments such as personal testing or educational labs.
-## Installation
-
-```bash
-git clone https://github.com/whoami136/SMTP-mail-SENDER.git
-cd SMTP-mail-SENDER
-python3 mailer.py
-```
-## Requirements
-
-- Python 3
-
-Check installation:
-
-```bash
-python3 --version
-```
+---
+*Created with 🐦 by Whoami*
