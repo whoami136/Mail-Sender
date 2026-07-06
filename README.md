@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9ee9a07a-b26d-4ff5-9f2c-09bbb1bbf0a3" width="100%" alt="Bird Mailer Interface">
+</p>
+
+An interactive, color-coded terminal CLI tool engineered for custom HTML email generation, priority warning styling, and secure file dispatch via SMTP.
+
 # 🐦 Bird Mailer (SMTP Edition)
 
 A sophisticated, terminal-based CLI email dispatch utility featuring interactive HTML priority template rendering and streamlined file attachments.
