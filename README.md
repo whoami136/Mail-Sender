@@ -8,13 +8,16 @@ A sophisticated, CLI-based email distribution tool optimized for the Resend API.
 * **Interactive UI:** A beautiful, color-coded terminal experience.
 * **Attachment Handling:** Easily attach files to your correspondence.
 
-## 🚀 Getting Started
-1. **Clone:** `git clone https://github.com/whoami136/SMTP-mail-SENDER.git`
-2. **Install:** `pip install resend`
-3. **Execute:** `python mailer.py`
+  # Operating System : Linux (Kali/Debian recommended)
+# Python Version   : 3.x
+# Dependencies     : resend (pip install resend)
+# API Access       : Resend API Key (https://resend.com/)
 
-## ⚙️ Configuration
-The tool creates a `.resend_config` file on your machine. This file is automatically excluded from version control to protect your credentials.
-
+# Created By Nur(Whoami)
+```bash
+git clone https://github.com/whoami136/Mail-Sender.git
+cd Mail-Sender
+pip install resend
+python mailer.py
 ---
-*Created with 🐦 by Whoami*
+
