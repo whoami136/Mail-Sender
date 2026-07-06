@@ -1,7 +1,13 @@
+import smtplib
 import sys
 import time
 import os
-import resend
+import getpass
+
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
 
 # ===== COLORS =====
 G = '\033[1;32m'
@@ -10,8 +16,6 @@ Y = '\033[1;33m'
 C = '\033[1;36m'
 W = '\033[1;37m'
 R = '\033[1;31m'
-
-CONFIG_FILE = ".resend_config"
 
 def slow_print(text):
     for c in text + "\n":
@@ -35,51 +39,27 @@ banner = rf"""
 {B}                      Y
 
 =====================================
-         MAIL TOOL(Creator:Nur)
+        SMTP MAIL SENDER TOOL
              Bird Edition 🐦
 =====================================
 """
 
 print("\033[H\033[J")
 print(banner)
-slow_print(G + "[+] Bird Mail System Loaded via Resend API...\n")
+slow_print(G + "[+] Bird Mail System Loaded...\n")
 
-# ===== SMART API KEY STORAGE SYSTEM =====
-api_key = ""
+# ===== INPUTS =====
+smtp_server = input(G + "SMTP Server (smtp.gmail.com): " + Y)
+if not smtp_server:
+    smtp_server = " smtp.gmail.com"
 
-if os.path.exists(CONFIG_FILE):
-    with open(CONFIG_FILE, "r") as f:
-        api_key = f.read().strip()
-    
-    print(G + f"[+] Automatically loaded your saved Resend API Key.")
-    change_key = input(Y + "Do you want to change/reset this key? (y/N): " + W).lower()
-    
-    if change_key == "y":
-        api_key = input(G + "Enter NEW Resend API Key (re_...): " + Y).replace(" ", "")
-        if api_key:
-            with open(CONFIG_FILE, "w") as f:
-                f.write(api_key)
-            slow_print(G + "[+] New API Key updated and saved permanently!")
-        else:
-            slow_print(R + "[ERROR] Key cannot be blank. Exiting.")
-            sys.exit()
-else:
-    # First time configuration setup
-    slow_print(Y + "[!] First-time setup detected.")
-    api_key = input(G + "Enter your Resend API Key (re_...): " + Y).replace(" ", "")
-    if api_key:
-        with open(CONFIG_FILE, "w") as f:
-            f.write(api_key)
-        slow_print(G + "[+] API Key saved permanently! You won't have to type it next time.")
-    else:
-        slow_print(R + "[ERROR] API key cannot be blank. Exiting.")
-        sys.exit()
+smtp_port_input = input(G + "SMTP Port (587): " + Y)
+smtp_port = int(smtp_port_input) if smtp_port_input else 587
 
-# Configure the Resend Engine with the loaded/updated key
-resend.api_key = api_key
+email = input(G + "Your Email: " + Y)
+password = getpass.getpass(G + "App Password: " + Y).replace(" ", "")
 
-# ===== USER INPUTS =====
-to_email = input(G + "Send To: " + Y)
+to = input(G + "Send To: " + Y)
 subject = input(G + "Subject: " + Y)
 message = input(G + "Message: " + Y)
 
@@ -148,53 +128,60 @@ if priority == "y":
     </div>
 
     <br>
-    <small>🐦 Sent via Bird Resend Mailer</small>
+    <small>🐦 Sent via Bird SMTP Mailer</small>
 
     </body>
     </html>
     """
+
     msg_subject = f"{warning_title} | {subject}"
 
-# ===== ATTACHMENT SETUP =====
-file_path = input(G + "Attach file path (ENTER to skip): " + Y)
-attachments_list = []
+# ===== BUILD EMAIL =====
+msg = MIMEMultipart("alternative")
+msg["From"] = f"Whoami <{email}>"
+msg["To"] = to
+msg["Subject"] = msg_subject
+
+msg.attach(MIMEText(html_body, "html"))
+
+# ===== ATTACHMENT =====
+file_path = input(G + "Attach file (ENTER to skip): " + Y)
 
 if file_path:
     if os.path.exists(file_path):
-        attachments_list.append({
-            "filename": os.path.basename(file_path),
-            "path": file_path
-        })
-        slow_print(C + "[+] File attached safely 🐦")
+        with open(file_path, "rb") as f:
+            part = MIMEBase("application", "octet-stream")
+            part.set_payload(f.read())
+
+        encoders.encode_base64(part)
+        part.add_header(
+            "Content-Disposition",
+            f"attachment; filename={os.path.basename(file_path)}"
+        )
+
+        msg.attach(part)
+        slow_print(C + "[+] File attached 🐦")
     else:
-        slow_print(R + "[!] File not found, continuing without attachment.")
+        slow_print(R + "[!] File not found")
 
-# ===== BUILD AND EXECUTE RESEND PARAMETERS =====
-# "Whoami" is now hardcoded as requested
-params = {
-    "from": "Whoami <onboarding@resend.dev>",
-    "to": [to_email],
-    "subject": msg_subject,
-    "html": html_body,
-}
-
-if attachments_list:
-    params["attachments"] = attachments_list
-
+# ===== SEND EMAIL =====
 try:
-    slow_print(C + "\n[+] Connecting to Resend Cloud Infrastructure...")
-    slow_print(C + "[+] Delivering message...")
-    
-    email_response = resend.Emails.send(params)
-    
-    print()
-    slow_print(G + "[SUCCESS] Email dispatched safely via Resend! 🐦")
-    print(G + f"Message ID: {email_response.get('id')}")
+    slow_print(C + "\n[+] Connecting SMTP...")
+    server = smtplib.SMTP(smtp_server, smtp_port)
+    server.ehlo()
+    server.starttls()
+
+    slow_print(C + "[+] Logging in...")
+    server.login(email, password)
+
+    slow_print(C + "[+] Sending email...")
+    server.send_message(msg)
+    server.quit()
+
+    slow_print(G + "[SUCCESS] Email sent 🐦")
 
 except Exception as e:
-    print()
-    slow_print(R + "[ERROR] Delivery through Resend failed")
+    slow_print(R + "[ERROR] Failed")
     print(R + str(e))
 
-print()
-slow_print(W + "Process completed.")
+slow_print(W + "Done.")
