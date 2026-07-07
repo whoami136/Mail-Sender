@@ -1,10 +1,7 @@
-cat << 'EOF' > README.md
-# 🐦 Bird Mailer (SMTP Edition)
-
 <p align="center">
   <img src="https://github.com" width="100%" alt="SMTP Mail Sender Tool Interface">
 </p>
-
+# 🐦 Bird Mailer (SMTP Edition)
 An interactive, color-coded terminal CLI tool engineered for custom HTML email generation, priority warning styling, and secure file dispatch via SMTP.
 
 ## 📝 Description
